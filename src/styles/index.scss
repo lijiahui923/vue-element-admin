@@ -121,7 +121,17 @@ aside {
 
 //main-container全局样式
 .app-container {
-  padding: 20px;
+  padding: 10px;
+  .search-container,
+  .table-container {
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 5px;
+  }
+  .table-container {
+      width: 100%;
+      height: 100%;
+  }
 }
 
 .components-container {
