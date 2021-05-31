@@ -1,104 +1,72 @@
 <template>
-  <div class="app-container">
-    <div class="filter-container">
-      <el-input v-model="listQuery.title" :placeholder="$t('table.title')" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-select v-model="listQuery.importance" :placeholder="$t('table.importance')" clearable style="width: 90px" class="filter-item">
-        <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item" />
-      </el-select>
-      <el-select v-model="listQuery.type" :placeholder="$t('table.type')" clearable class="filter-item" style="width: 130px">
-        <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name+'('+item.key+')'" :value="item.key" />
-      </el-select>
-      <el-select v-model="listQuery.sort" style="width: 140px" class="filter-item" @change="handleFilter">
-        <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key" />
-      </el-select>
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-        {{ $t('table.search') }}
-      </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
-        {{ $t('table.add') }}
-      </el-button>
-      <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
-        {{ $t('table.export') }}
-      </el-button>
-      <el-checkbox v-model="showReviewer" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">
-        {{ $t('table.reviewer') }}
-      </el-checkbox>
-    </div>
-
-    <el-table
-      :key="tableKey"
-      v-loading="listLoading"
-      :data="list"
-      border
-      fit
-      highlight-current-row
-      style="width: 100%;"
-      @sort-change="sortChange"
-    >
-      <el-table-column :label="$t('table.id')" prop="id" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
-        <template slot-scope="{row}">
-          <span>{{ row.id }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('table.date')" width="150px" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('table.title')" min-width="150px">
-        <template slot-scope="{row}">
-          <span class="link-type" @click="handleUpdate(row)">{{ row.title }}</span>
-          <el-tag>{{ row.type | typeFilter }}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('table.author')" width="110px" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.author }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column v-if="showReviewer" :label="$t('table.reviewer')" width="110px" align="center">
-        <template slot-scope="{row}">
-          <span style="color:red;">{{ row.reviewer }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('table.importance')" width="80px">
-        <template slot-scope="{row}">
-          <svg-icon v-for="n in +row.importance" :key="n" icon-class="star" class="meta-item__icon" />
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('table.readings')" align="center" width="95">
-        <template slot-scope="{row}">
-          <span v-if="row.pageviews" class="link-type" @click="handleFetchPv(row.pageviews)">{{ row.pageviews }}</span>
-          <span v-else>0</span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('table.status')" class-name="status-col" width="100">
-        <template slot-scope="{row}">
-          <el-tag :type="row.status | statusFilter">
-            {{ row.status }}
-          </el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('table.actions')" align="center" width="230" class-name="small-padding fixed-width">
-        <template slot-scope="{row,$index}">
-          <el-button type="primary" size="mini" @click="handleUpdate(row)">
-            {{ $t('table.edit') }}
+  <div>
+    <top-and-bottom-layout class="app-container">
+      <template #top>
+        <div class="search-container">
+          <el-input v-model="listQuery.title" :placeholder="$t('table.title')" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+          <g-select
+            v-model="listQuery.importance"
+            :options="importanceOptions"
+            :placeholder="$t('table.importance')"
+            clearable
+            style="width: 90px"
+            class="filter-item"
+          />
+          <el-select v-model="listQuery.type" :placeholder="$t('table.type')" clearable class="filter-item" style="width: 130px">
+            <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name+'('+item.key+')'" :value="item.key" />
+          </el-select>
+          <el-select v-model="listQuery.sort" style="width: 140px" class="filter-item" @change="handleFilter">
+            <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key" />
+          </el-select>
+          <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+            {{ $t('table.search') }}
           </el-button>
-          <el-button v-if="row.status!='published'" size="mini" type="success" @click="handleModifyStatus(row,'published')">
-            {{ $t('table.publish') }}
+          <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
+            {{ $t('table.add') }}
           </el-button>
-          <el-button v-if="row.status!='draft'" size="mini" @click="handleModifyStatus(row,'draft')">
-            {{ $t('table.draft') }}
+          <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
+            {{ $t('table.export') }}
           </el-button>
-          <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index)">
-            {{ $t('table.delete') }}
-          </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
-
+          <el-checkbox v-model="showReviewer" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">
+            {{ $t('table.reviewer') }}
+          </el-checkbox>
+        </div>
+      </template>
+      <template #buttom="{ height }">
+        <g-table
+          :key="tableKey"
+          v-loading="listLoading"
+          class="table-container"
+          :columns="columns"
+          :data="list"
+          :height="height"
+          :pagination-config="pagination"
+          :columns-config="{'align': 'center'}"
+          @page-change="pageChange"
+          @sort-change="sortChange"
+        >
+          <template v-slot:timestamp="{ row }">
+            <span>{{ row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+          </template>
+          <template v-slot:title="{ row }">
+            <span class="link-type" @click="handleUpdate(row)">{{ row.title }}</span>
+            <el-tag>{{ row.type | typeFilter }}</el-tag>
+          </template>
+          <template v-slot:importance="{ row }">
+            <svg-icon v-for="n in +row.importance" :key="n" icon-class="star" class="meta-item__icon" />
+          </template>
+          <template v-slot:readings="{ row }">
+            <span v-if="row.pageviews" class="link-type" @click="handleFetchPv(row.pageviews)">{{ row.pageviews }}</span>
+            <span v-else>0</span>
+          </template>
+          <template v-slot:status="{ row }">
+            <el-tag :type="row.status | statusFilter">
+              {{ row.status }}
+            </el-tag>
+          </template>
+        </g-table>
+      </template>
+    </top-and-bottom-layout>
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
         <el-form-item :label="$t('table.type')" prop="type">
@@ -133,7 +101,6 @@
         </el-button>
       </div>
     </el-dialog>
-
     <el-dialog :visible.sync="dialogPvVisible" title="Reading statistics">
       <el-table :data="pvData" border fit highlight-current-row style="width: 100%">
         <el-table-column prop="key" label="Channel" />
@@ -150,7 +117,7 @@
 import { fetchList, fetchPv, createArticle, updateArticle } from '@/api/article'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
-import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+import { pagination } from './mixins'
 
 const calendarTypeOptions = [
   { key: 'CN', display_name: 'China' },
@@ -167,7 +134,6 @@ const calendarTypeKeyValue = calendarTypeOptions.reduce((acc, cur) => {
 
 export default {
   name: 'ComplexTable',
-  components: { Pagination },
   directives: { waves },
   filters: {
     statusFilter(status) {
@@ -184,19 +150,167 @@ export default {
   },
   data() {
     return {
+      columns: [
+        {
+          label: 'table.id',
+          prop: 'id',
+          sortable: 'custom'
+        },
+        {
+          label: 'table.date',
+          prop: 'timestamp',
+          slots: 'timestamp'
+        },
+        {
+          label: 'table.title',
+          prop: 'title',
+          'min-width': '150px',
+          slots: 'title'
+        },
+        {
+          label: 'table.author',
+          prop: 'author'
+        },
+        {
+          label: 'table.importance',
+          prop: 'importance',
+          slots: 'importance'
+        },
+        {
+          label: 'table.readings',
+          prop: 'readings',
+          slots: 'readings'
+        },
+        {
+          label: 'table.status',
+          prop: 'status',
+          slots: 'status'
+        },
+        {
+          type: 'operate',
+          align: 'center',
+          width: '300px',
+          buttons: {
+            update: {
+              icon: '',
+              type: 'primary',
+              label: '编辑',
+              // label: 'table.edit',
+              click: (row) => {
+                this.handleUpdate(row)
+              }
+            },
+            published: {
+              type: 'success',
+              label: '发布',
+              // label: 'table.publish',
+              click: (row) => {
+                this.handleModifyStatus(row, 'published')
+              },
+              disabled: (row) => {
+                return row.status !== 'published'
+              }
+            },
+            draft: {
+              type: 'info',
+              label: '起草',
+              // label: 'table.draft',
+              click: (row) => {
+                this.handleModifyStatus(row, 'draft')
+              },
+              visible: (row) => {
+                // console.log(row.status === 'draft')
+                return row.status === 'draft'
+              }
+            },
+            deleted: {
+              type: 'danger',
+              label: '删除',
+              alert: {
+                width: '400px',
+                content: '确认要删除吗???',
+                // 可以是对象可以是string el-button
+                confirmBtn: {
+                  type: 'primary',
+                  content: '删除'
+                },
+                cancelBtn: '取消',
+                confirm(row, index) {
+                  console.log('11111111111111111' + row, index)
+                },
+                cancel(row, index) {
+                  console.log(row, index)
+                }
+              }
+              // label: 'table.delete',
+              // click: (row, index) => {
+              //   this.handleDelete(row, index)
+              // }
+              // disabled: (row) => {
+              //   return row.status === 'deleted'
+              // }
+            }
+          }
+        }
+      ],
+      pagination: pagination,
       tableKey: 0,
       list: null,
       total: 0,
       listLoading: true,
       listQuery: {
         page: 1,
-        limit: 20,
+        limit: 10,
         importance: undefined,
         title: undefined,
         type: undefined,
         sort: '+id'
       },
-      importanceOptions: [1, 2, 3],
+      // importanceOptions: [1, 2, 3],
+      importanceOptions: [{
+        label: '热门城市',
+        children: [{
+          value: 'Shanghai',
+          label: '上海'
+        }, {
+          value: 'Beijing',
+          label: '北京'
+        }]
+      }, {
+        label: '城市名',
+        children: [{
+          value: 'Chengdu',
+          label: '成都'
+        }, {
+          value: 'Shenzhen',
+          label: '深圳'
+        }, {
+          value: 'Guangzhou',
+          label: '广州'
+        }, {
+          value: 'Dalian',
+          label: '大连'
+        }]
+      }],
+      // importanceOptions: [{
+      //   value: 'Beijing',
+      //   label: '北京'
+      // }, {
+      //   value: 'Shanghai',
+      //   label: '上海'
+      // }, {
+      //   value: 'Nanjing',
+      //   label: '南京'
+      // }, {
+      //   value: 'Chengdu',
+      //   label: '成都'
+      // }, {
+      //   value: 'Shenzhen',
+      //   label: '深圳'
+      // }, {
+      //   value: 'Guangzhou',
+      //   label: '广州'
+      // }],
       calendarTypeOptions,
       sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
       statusOptions: ['published', 'draft', 'deleted'],
@@ -230,11 +344,16 @@ export default {
     this.getList()
   },
   methods: {
+    pageChange(currentPage, pageSize) {
+      this.pagination.currentPage = currentPage
+      this.pagination.pageSize = pageSize
+      this.getList()
+    },
     getList() {
       this.listLoading = true
-      fetchList(this.listQuery).then(response => {
+      fetchList(this.pagination).then(response => {
         this.list = response.data.items
-        this.total = response.data.total
+        this.pagination.total = response.data.total
 
         // Just to simulate the time of the request
         setTimeout(() => {
@@ -377,3 +496,4 @@ export default {
   }
 }
 </script>
+

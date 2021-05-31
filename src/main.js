@@ -19,7 +19,10 @@ import './permission' // permission control
 import './utils/error-log' // error log
 
 import * as filters from './filters' // global filters
-
+// 全局的组件
+import common from './common'
+// 全局的指令
+import directives from './directive'
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
@@ -37,7 +40,8 @@ Vue.use(Element, {
   size: Cookies.get('size') || 'medium', // set element-ui default size
   i18n: (key, value) => i18n.t(key, value)
 })
-
+Vue.use(common)
+Vue.use(directives)
 // register global utility filters
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
