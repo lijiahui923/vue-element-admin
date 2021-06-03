@@ -53,7 +53,7 @@ export default {
   height: calc(100vh - 50px);
   width: 100%;
   position: relative;
-  overflow: hidden;
+  overflow: auto;
   background-color: #f0f2f5 ;
 }
 
