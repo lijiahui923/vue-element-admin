@@ -10,7 +10,7 @@ export default {
     '$store.getters.mainBodyH': {
       immediate: true,
       handler(val) {
-        this.pageHeight = val
+        this.pageHeight = val - 20
       }
     }
   },

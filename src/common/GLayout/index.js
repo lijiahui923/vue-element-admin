@@ -1,7 +1,9 @@
 import MainLayout from './MainLayout.vue'
-import TopAndBottomLayout from './TopAndBottomLayout.vue'
+import VerticalLayout from './VerticalLayout.vue'
+import HorizontalLayout from './HorizontalLayout.vue'
 
 export default {
   MainLayout,
-  TopAndBottomLayout
+  VerticalLayout,
+  HorizontalLayout
 }

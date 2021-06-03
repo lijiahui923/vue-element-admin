@@ -16,7 +16,7 @@
 @create:lijiahui
 */
 export default {
-  name: 'TopAndBottomLayout',
+  name: 'VerticalLayout',
   props: {},
   data() {
     return {

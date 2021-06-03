@@ -1,36 +1,8 @@
 <template>
   <div>
-    <top-and-bottom-layout class="app-container">
+    <VerticalLayout class="app-container">
       <template #top>
-        <div class="search-container">
-          <!-- <el-input v-model="listQuery.title" :placeholder="$t('table.title')" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-          <g-select
-            v-model="listQuery.importance"
-            :options="importanceOptions"
-            :placeholder="$t('table.importance')"
-            clearable
-            style="width: 90px"
-            class="filter-item"
-          />
-          <el-select v-model="listQuery.type" :placeholder="$t('table.type')" clearable class="filter-item" style="width: 130px">
-            <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name+'('+item.key+')'" :value="item.key" />
-          </el-select>
-          <el-select v-model="listQuery.sort" style="width: 140px" class="filter-item" @change="handleFilter">
-            <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key" />
-          </el-select> -->
-          <!-- <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-            {{ $t('table.search') }}
-          </el-button>
-          <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
-            {{ $t('table.add') }}
-          </el-button>
-          <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
-            {{ $t('table.export') }}
-          </el-button> -->
-          <!-- <el-checkbox v-model="showReviewer" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">
-            {{ $t('table.reviewer') }}
-          </el-checkbox> -->aaaaa
-        </div>
+        <div class="search-container">aaaaa</div>
       </template>
       <template #buttom="{ height }">
         <g-table
@@ -45,9 +17,9 @@
           </template>
         </g-table>
       </template>
-    </top-and-bottom-layout>
+    </VerticalLayout>
     <el-dialog :visible.sync="dialogVisible" :title="dialogType==='edit'?'Edit Role':'New Role'">
-      <el-form :model="role" label-width="80px" label-position="left">
+      <el-form :model="role" label-width="80px" label-position="center">
         <el-form-item label="Name">
           <el-input v-model="role.name" placeholder="Role Name" />
         </el-form-item>
@@ -72,6 +44,59 @@
         </el-button>
       </div>
     </el-dialog>
+    <!-- <HorizontalLayout v-if="!isShow" class="app-container">
+      <template #left="{ height }">
+        <div :style="{ 'height': height+ 'px' }" class="left-tree">
+          <el-input
+            v-model="filterText"
+            placeholder="输入关键字进行过滤"
+          />
+          <el-tree
+            ref="tree"
+            :check-strictly="checkStrictly"
+            :data="routesData"
+            :props="defaultProps"
+            show-checkbox
+            node-key="path"
+            :filter-node-method="filterNode"
+            :style="{ 'height': height - 40 + 'px' }"
+            class="menu-tree"
+          />
+        </div>
+      </template>
+      <template #rightTop>
+        <el-form :model="role" label-width="80px" label-position="right" class="right-top-form">
+          <el-form-item label="Name">
+            <el-input v-model="role.name" placeholder="Role Name" />
+          </el-form-item>
+          <el-form-item label="Desc">
+            <el-input
+              v-model="role.description"
+              :autosize="{ minRows: 2, maxRows: 4}"
+              type="textarea"
+              placeholder="Role Description"
+            />
+          </el-form-item>
+        </el-form>
+      </template>
+      <template #rightBottom="{ height }">
+        <g-table
+          class="right-bottom-table"
+          :height="height - 40"
+          :columns="columns"
+          :data="rolesList"
+          :columns-config="{'align': 'center'}"
+        >
+          <template #headerLeft>
+            按钮资源
+          </template>
+        </g-table>
+        <div class="bottom-btn">
+          <el-button type="danger">取消</el-button>
+          <el-button type="primary">保存</el-button>
+        </div>
+      </template>
+    </HorizontalLayout> -->
   </div>
 </template>
 
@@ -93,10 +118,11 @@ const defaultRole = {
 }
 export default {
   name: 'RoleManagement',
-  components: {},
   props: {},
   data() {
     return {
+      filterText: '',
+      isShow: false,
       role: Object.assign({}, defaultRole),
       routes: [],
       rolesList: [],
@@ -144,13 +170,21 @@ export default {
       return this.routes
     }
   },
-  watch: {},
+  watch: {
+    filterText(val) {
+      this.$refs.tree.filter(val)
+    }
+  },
   mounted() {},
   created() {
     this.getRoutes()
     this.getRoles()
   },
   methods: {
+    filterNode(value, data) {
+      if (!value) return true
+      return data.label.indexOf(value) !== -1
+    },
     async getRoutes() {
       const res = await getRoutes()
       this.serviceRoutes = res.data
@@ -322,4 +356,30 @@ export default {
   }
 }
 </script>
-<style lang='scss' scoped></style>
+<style lang='scss' scoped>
+.left-tree {
+    background-color: #fff;
+    padding: 6px;
+    border-radius: 6px;
+}
+.menu-tree {
+  padding-top: 6px;
+  overflow: auto;
+}
+.right-top-form {
+  margin-left: 10px;
+  padding: 6px;
+  border-radius: 6px;
+  background-color: #fff;
+}
+.right-bottom-table {
+  padding: 6px;
+  margin-left: 10px;
+  border-radius: 6px;
+  background-color: #fff;
+}
+.bottom-btn {
+  text-align: center;
+  margin-top: 10px;
+}
+</style>
