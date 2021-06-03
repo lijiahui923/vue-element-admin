@@ -1,5 +1,6 @@
-import { asyncRoutes, constantRoutes } from '@/router'
-
+import { constantRoutes } from '@/router'
+import { handleJsonRouterToAsyncRouter } from '@/utils/permission'
+import { getRoutes } from '@/api/role'
 /**
  * Use meta.role to determine if the current user has permission
  * @param roles
@@ -47,16 +48,24 @@ const mutations = {
 }
 
 const actions = {
+  // 这个地方请求后端的菜单
   generateRoutes({ commit }, roles) {
     return new Promise(resolve => {
-      let accessedRoutes
-      if (roles.includes('admin')) {
-        accessedRoutes = asyncRoutes || []
-      } else {
-        accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
-      }
-      commit('SET_ROUTES', accessedRoutes)
-      resolve(accessedRoutes)
+      // let accessedRoutes
+      // if (roles.includes('admin')) {
+      //   accessedRoutes = asyncRoutes || []
+      // } else {
+      //   accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
+      // }
+      // commit('SET_ROUTES', accessedRoutes)
+      // resolve(accessedRoutes)
+      // 调用后端返回的用户路由
+      getRoutes().then(res => {
+        const accessedRoutes = handleJsonRouterToAsyncRouter(res.data)
+        const routes = filterAsyncRoutes(accessedRoutes, roles)
+        commit('SET_ROUTES', routes)
+        resolve(routes)
+      })
     })
   }
 }
