@@ -22,3 +22,10 @@ export function logout() {
     method: 'post'
   })
 }
+
+export function getUserAll() {
+  return request({
+    url: '/vue-element-admin/user/all',
+    method: 'get'
+  })
+}

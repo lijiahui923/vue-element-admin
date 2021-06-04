@@ -1,4 +1,4 @@
-import { constantRoutes } from '@/router'
+import { asyncRoutes, constantRoutes } from '@/router'
 import { handleJsonRouterToAsyncRouter } from '@/utils/permission'
 import { getRoutes } from '@/api/role'
 /**
@@ -60,12 +60,18 @@ const actions = {
       // commit('SET_ROUTES', accessedRoutes)
       // resolve(accessedRoutes)
       // 调用后端返回的用户路由
-      getRoutes().then(res => {
-        const accessedRoutes = handleJsonRouterToAsyncRouter(res.data)
-        const routes = filterAsyncRoutes(accessedRoutes, roles)
-        commit('SET_ROUTES', routes)
-        resolve(routes)
-      })
+      let routes
+      // admin拥有所有的权限是超级管理员
+      if (roles.includes('admin')) {
+        routes = asyncRoutes || []
+      } else {
+        getRoutes().then(res => {
+          const accessedRoutes = handleJsonRouterToAsyncRouter(res.data)
+          routes = filterAsyncRoutes(accessedRoutes, roles)
+        })
+      }
+      commit('SET_ROUTES', routes)
+      resolve(routes)
     })
   }
 }

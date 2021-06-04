@@ -4,12 +4,12 @@
 
 <script>
 /**
-@description:
+@description:权限信息
 @createTime:2021-05-31
 @create:lijiahui
 */
 export default {
-  name: '',
+  name: 'PermissionInformation',
   props: {},
   data() {
     return {}

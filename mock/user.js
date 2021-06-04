@@ -1,4 +1,35 @@
 
+const Mock = require('mockjs')
+// 拓展 mock js
+Mock.Random.extend({
+  phone: function() {
+    const phonePrefixes = ['132', '135', '189'] // 自己写前缀哈
+    return this.pick(phonePrefixes) + Mock.mock(/\d{8}/) // Number()
+  }
+})
+// 生成 1 - 10 个 随机手机号码
+const { phone } = Mock.mock({
+  'phone': '@phone'
+})
+// 所有的用户
+const userList = []
+const count = 35
+
+for (let i = 0; i < count; i++) {
+  userList.push(Mock.mock({
+    rowId: '@increment',
+    id: '@first',
+    name: '@cname',
+    'gender|1': [0, 1],
+    'status|1': [0, 1, 2],
+    'phone': phone,
+    email: '@email',
+    job: '@ctitle()',
+    description: '@csentence',
+    createTime: '@datetime'
+  }))
+}
+
 const tokens = {
   admin: {
     token: 'admin-token'
@@ -78,6 +109,36 @@ module.exports = [
       return {
         code: 20000,
         data: 'success'
+      }
+    }
+  },
+
+  // 获取所有的用户
+  {
+    url: '/vue-element-admin/user/all',
+    type: 'get',
+    response: config => {
+      const { importance, type, title, currentPage = 1, pageSize = 10, sort } = config.query
+
+      let mockList = userList.filter(item => {
+        if (importance && item.importance !== +importance) return false
+        if (type && item.type !== type) return false
+        if (title && item.title.indexOf(title) < 0) return false
+        return true
+      })
+
+      if (sort === '-id') {
+        mockList = mockList.reverse()
+      }
+
+      const pageList = mockList.filter((item, index) => index < pageSize * currentPage && index >= pageSize * (currentPage - 1))
+
+      return {
+        code: 20000,
+        data: {
+          total: mockList.length,
+          rows: pageList
+        }
       }
     }
   }
