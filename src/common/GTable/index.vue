@@ -84,23 +84,25 @@ export default {
       const columns = this.renderColumns(h)
       const $this = this
       const props = Object.assign({}, defaultProps, $attrs, { data: this.data })
-      const newProps = omit(props, 'height')
-      let headerToolsHeight = ''
+      // props.height = props.height - 60
+      // const newProps = omit(props, 'height')
+      let headerToolsHeight
       if (this.$refs['table-header-tools']) {
         headerToolsHeight = document.getElementsByClassName('header-tools')[0].clientHeight
       }
+      props.height = this.paginationConfig
+        ? props.height - (headerToolsHeight ? headerToolsHeight + 56 + 6 : 56)
+        : props.height - (headerToolsHeight ? headerToolsHeight + 20 + 6 : 20)
       return h(
         'el-table',
         {
           // 减去分页的高度 这20是内边距,这6是头部工具栏的下边距
-          style: {
-            height: this.paginationConfig
-              ? props.height - (headerToolsHeight ? headerToolsHeight + 56 + 6 : 56) + 'px'
-              : props.height - (headerToolsHeight ? headerToolsHeight + 20 + 6 : 20) + 'px'
-          },
-          props: {
-            ...newProps
-          },
+          // style: {
+          //   height: this.paginationConfig
+          //     ? props.height - (headerToolsHeight ? headerToolsHeight + 56 + 6 : 56) + 'px'
+          //     : props.height - (headerToolsHeight ? headerToolsHeight + 20 + 6 : 20) + 'px'
+          // },
+          props,
           on: {
             ...$listeners,
             // 当拖动表头改变了列的宽度的时候会触发该事件
