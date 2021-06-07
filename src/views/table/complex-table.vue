@@ -96,7 +96,7 @@
         <el-button @click="dialogFormVisible = false">
           {{ $t('table.cancel') }}
         </el-button>
-        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
+        <el-button v-throttle="['createArticle', 'updateArticle']" type="primary" @click="dialogStatus==='create'?createData():updateData()">
           {{ $t('table.confirm') }}
         </el-button>
       </div>
