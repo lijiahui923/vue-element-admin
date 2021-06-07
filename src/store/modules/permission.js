@@ -65,7 +65,9 @@ const actions = {
       if (roles.includes('admin')) {
         routes = asyncRoutes || []
       } else {
+        // 这里根据角色查询路由
         getRoutes().then(res => {
+          // 把后端返回的字符串转成路由
           const accessedRoutes = handleJsonRouterToAsyncRouter(res.data)
           routes = filterAsyncRoutes(accessedRoutes, roles)
         })
