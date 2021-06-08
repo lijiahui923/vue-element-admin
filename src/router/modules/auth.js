@@ -6,21 +6,21 @@ const authRouter = {
   redirect: '/auth/role-management',
   name: 'authority-management',
   meta: {
-    title: '权限管理',
+    title: 'authorityManagement',
     icon: 'peoples'
   },
   children: [
     {
       path: 'role-management',
       component: () => import('@/views/authority-management/role-management'),
-      name: 'ComplexTable',
-      meta: { title: '角色管理', permission: ['add', 'update', 'remove'] }
+      name: 'role-management',
+      meta: { title: 'roleManagement', permission: ['add', 'update', 'remove'] }
     },
     {
       path: 'permission-information',
       component: () => import('@/views/authority-management/permission-information'),
-      name: 'ComplexTable',
-      meta: { title: '权限信息', permission: ['add', 'update', 'remove'] }
+      name: 'permission-information',
+      meta: { title: 'permissionInformation', permission: ['add', 'update', 'remove'] }
     }
   ]
 }

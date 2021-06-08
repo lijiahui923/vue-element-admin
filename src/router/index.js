@@ -10,24 +10,23 @@ import Layout from '@/layout'
 import componentsRouter from './modules/components'
 import chartsRouter from './modules/charts'
 import tableRouter from './modules/table'
-import nestedRouter from './modules/nested'
 import authRouter from './modules/auth'
 import userRouter from './modules/user'
 /**
  * Note: sub-menu only appear when route children.length >= 1
  * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
  *
- * hidden: true                   if set true, item will not show in the sidebar(default is false)
- * alwaysShow: true               if set true, will always show the root menu
- *                                if not set alwaysShow, when item has more than one children route,
- *                                it will becomes nested mode, otherwise not show the root menu
- * redirect: noRedirect           if set noRedirect will no redirect in the breadcrumb
- * name:'router-name'             the name is used by <keep-alive> (must set!!!)
+ * hidden: true                   如果设置为 true，项目将不会显示在侧边栏中（默认为 false）
+ * alwaysShow: true               如果设置为 true，将始终显示根菜单
+ *                                如果不设置 alwaysShow，当 item 有多个子路由时，
+ *                                它将变成嵌套模式，否则不显示根菜单
+ * redirect: noRedirect           如果设置 noRedirect 将不会在面包屑中重定向
+ * name:'router-name'             该名称由 <keep-alive> 使用（必须设置！！！）
  * meta : {
-    roles: ['admin','editor']    control the page roles (you can set multiple roles)
-    title: 'title'               the name show in sidebar and breadcrumb (recommend set)
-    icon: 'svg-name'/'el-icon-x' the icon show in the sidebar
-    noCache: true                if set true, the page will no be cached(default is false)
+    roles: ['admin','editor']    控制页面角色（可以设置多个角色）
+    title: 'title'               名称显示在侧边栏和面包屑中（推荐设置）
+    icon: 'svg-name'/'el-icon-x' 图标显示在侧边栏中
+    noCache: true                如果设置为true，页面将不会被缓存（默认为false）
     affix: true                  if set true, the tag will affix in the tags-view
     breadcrumb: false            if set false, the item will hidden in breadcrumb(default is true)
     activeMenu: '/example/list'  if set path, the sidebar will highlight the path you set
@@ -81,31 +80,6 @@ export const constantRoutes = [
         component: () => import('@/views/dashboard/index'),
         name: 'Dashboard',
         meta: { title: 'dashboard', icon: 'dashboard', affix: true }
-      }
-    ]
-  },
-  {
-    path: '/documentation',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/documentation/index'),
-        name: 'Documentation',
-        meta: { title: 'documentation', icon: 'documentation', affix: true }
-      }
-    ]
-  },
-  {
-    path: '/guide',
-    component: Layout,
-    redirect: '/guide/index',
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/guide/index'),
-        name: 'Guide',
-        meta: { title: 'guide', icon: 'guide', noCache: true }
       }
     ]
   },
@@ -188,7 +162,6 @@ export const asyncRoutes = [
   /** when your routing map is too long, you can split it into small modules **/
   componentsRouter,
   chartsRouter,
-  nestedRouter,
   tableRouter,
   authRouter,
   userRouter,
@@ -238,31 +211,6 @@ export const asyncRoutes = [
   },
 
   {
-    path: '/error',
-    component: Layout,
-    redirect: 'noRedirect',
-    name: 'ErrorPages',
-    meta: {
-      title: 'errorPages',
-      icon: '404'
-    },
-    children: [
-      {
-        path: '401',
-        component: () => import('@/views/error-page/401'),
-        name: 'Page401',
-        meta: { title: 'page401', noCache: true }
-      },
-      {
-        path: '404',
-        component: () => import('@/views/error-page/404'),
-        name: 'Page404',
-        meta: { title: 'page404', noCache: true }
-      }
-    ]
-  },
-
-  {
     path: '/error-log',
     component: Layout,
     children: [
@@ -274,93 +222,6 @@ export const asyncRoutes = [
       }
     ]
   },
-
-  {
-    path: '/excel',
-    component: Layout,
-    redirect: '/excel/export-excel',
-    name: 'Excel',
-    meta: {
-      title: 'excel',
-      icon: 'excel'
-    },
-    children: [
-      {
-        path: 'export-excel',
-        component: () => import('@/views/excel/export-excel'),
-        name: 'ExportExcel',
-        meta: { title: 'exportExcel' }
-      },
-      {
-        path: 'export-selected-excel',
-        component: () => import('@/views/excel/select-excel'),
-        name: 'SelectExcel',
-        meta: { title: 'selectExcel' }
-      },
-      {
-        path: 'export-merge-header',
-        component: () => import('@/views/excel/merge-header'),
-        name: 'MergeHeader',
-        meta: { title: 'mergeHeader' }
-      },
-      {
-        path: 'upload-excel',
-        component: () => import('@/views/excel/upload-excel'),
-        name: 'UploadExcel',
-        meta: { title: 'uploadExcel' }
-      }
-    ]
-  },
-
-  {
-    path: '/zip',
-    component: Layout,
-    redirect: '/zip/download',
-    alwaysShow: true,
-    name: 'Zip',
-    meta: { title: 'zip', icon: 'zip' },
-    children: [
-      {
-        path: 'download',
-        component: () => import('@/views/zip/index'),
-        name: 'ExportZip',
-        meta: { title: 'exportZip' }
-      }
-    ]
-  },
-
-  {
-    path: '/pdf',
-    component: Layout,
-    redirect: '/pdf/index',
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/pdf/index'),
-        name: 'PDF',
-        meta: { title: 'pdf', icon: 'pdf' }
-      }
-    ]
-  },
-  {
-    path: '/pdf/download',
-    component: () => import('@/views/pdf/download'),
-    hidden: true
-  },
-
-  {
-    path: '/theme',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/theme/index'),
-        name: 'Theme',
-        meta: { title: 'theme', icon: 'theme' }
-      }
-    ]
-  },
-
   {
     path: '/clipboard',
     component: Layout,
@@ -370,19 +231,6 @@ export const asyncRoutes = [
         component: () => import('@/views/clipboard/index'),
         name: 'ClipboardDemo',
         meta: { title: 'clipboardDemo', icon: 'clipboard' }
-      }
-    ]
-  },
-
-  {
-    path: '/i18n',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/i18n-demo/index'),
-        name: 'I18n',
-        meta: { title: 'i18n', icon: 'international' }
       }
     ]
   },

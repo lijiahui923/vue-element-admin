@@ -28,7 +28,6 @@ export default function checkPermission(value) {
  */
 export function handleJsonRouterToAsyncRouter(jsonRouter, t) {
   t = jsonRouter.map(item => {
-    console.log(item.component)
     if (item.component === 'Layout') {
       item.component = Layout
     } else if (item.component) {

@@ -1,5 +1,5 @@
 <template>
-  <el-row :gutter="40" class="panel-group">
+  <el-row :gutter="20" class="panel-group">
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class="card-panel" @click="handleSetLineChartData('newVisitis')">
         <div class="card-panel-icon-wrapper icon-people">
@@ -72,13 +72,12 @@ export default {
 
 <style lang="scss" scoped>
 .panel-group {
-  margin-top: 18px;
-
   .card-panel-col {
     margin-bottom: 32px;
   }
 
   .card-panel {
+    width: 100%;
     height: 108px;
     cursor: pointer;
     font-size: 12px;
@@ -86,7 +85,7 @@ export default {
     overflow: hidden;
     color: #666;
     background: #fff;
-    box-shadow: 4px 4px 40px rgba(0, 0, 0, .05);
+    box-shadow: 4px 4px 40px rgba(168, 48, 48, 0.05);
     border-color: rgba(0, 0, 0, .05);
 
     &:hover {
