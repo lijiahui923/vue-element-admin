@@ -32,12 +32,9 @@
           <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
             {{ $t('table.search') }}
           </el-button>
-          <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
-            {{ $t('table.add') }}
-          </el-button>
-          <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
+          <!-- <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
             {{ $t('table.export') }}
-          </el-button>
+          </el-button> -->
         </div>
       </template>
       <template #buttom="{ height }">
@@ -53,6 +50,10 @@
           @page-change="pageChange"
           @sort-change="sortChange"
         >
+          <template #headerLeft>
+            <g-button :options="buttonGroup" />
+            <!-- <g-button type="primary" icon="el-icon-edit" unique-key="add" @click="handleCreate">{{ $t('table.add') }}</g-button> -->
+          </template>
           <template v-slot:timestamp="{ row }">
             <span>{{ row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
           </template>
@@ -204,10 +205,6 @@ export default {
           width: '300px',
           buttons: {
             update: {
-              icon: '',
-              type: 'primary',
-              label: '编辑',
-              // label: 'table.edit',
               click: (row) => {
                 this.handleUpdate(row)
               }
@@ -235,9 +232,7 @@ export default {
                 return row.status === 'draft'
               }
             },
-            deleted: {
-              type: 'danger',
-              label: '删除',
+            remove: {
               alert: {
                 width: '400px',
                 content: '确认要删除吗???',
@@ -265,6 +260,19 @@ export default {
           }
         }
       ],
+      buttonGroup: {
+        add: {
+          click: () => {
+            this.handleCreate()
+          }
+        },
+        export: {
+          label: 'table.export',
+          click: () => {
+            this.handleDownload()
+          }
+        }
+      },
       pagination: pagination,
       tableKey: 0,
       list: null,

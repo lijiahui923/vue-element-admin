@@ -7,14 +7,17 @@ import { isObject, isFunction, has, isBoolean, omit, cloneDeep, isPlainObject } 
 */
 const DEFAULT_BUTTONS = {
   add: {
+    type: 'primary',
     label: '新增',
     icon: 'el-icon-plus'
   },
   update: {
+    type: 'primary',
     label: '编辑',
     icon: 'el-icon-edit'
   },
   remove: {
+    type: 'danger',
     label: '删除',
     icon: 'el-icon-delete'
   }
@@ -255,7 +258,7 @@ export default {
               title: btnConfig.attr.title ? this.t(btnConfig.attr.title) : ''
             },
             style: {
-              display: isBoolean(btnConfig.attr.visible) && !btnConfig.attr.visible ? 'none' : 'inline-block'
+              'display': isBoolean(btnConfig.attr.visible) && !btnConfig.attr.visible ? 'none' : 'inline-block'
             },
             key: btnConfig.key,
             directives,
