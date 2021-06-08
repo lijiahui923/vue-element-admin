@@ -20,7 +20,6 @@ service.interceptors.request.use(
       // please modify it according to the actual situation
       config.headers['X-Token'] = getToken()
     }
-    console.log(config)
     store.commit('interfaces/ADD_INTERFACE', config.name)
     return config
   },

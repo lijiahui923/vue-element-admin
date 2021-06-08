@@ -1,8 +1,8 @@
 {
   "name": "vue-element-admin",
-  "version": "4.3.1",
-  "description": "A magical vue admin. An out-of-box UI solution for enterprise applications. Newest development stack of vue. Lots of awesome features",
-  "author": "Pan <panfree23@gmail.com>",
+  "version": "1.0.0",
+  "description": "一个基于花裤衩大佬的后台管理系统为模板基础的后台管理系统",
+  "author": "李嘉慧 <lijiahui0063@163.com>",
   "scripts": {
     "dev": "vue-cli-service serve",
     "lint": "eslint --ext .js,.vue src",
