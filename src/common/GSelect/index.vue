@@ -7,9 +7,10 @@
 export default {
   name: 'GSelect',
   props: {
+    // eslint-disable-next-line vue/require-default-prop
     value: {
-      type: String,
-      default: ''
+      // eslint-disable-next-line vue/require-prop-type-constructor
+      type: String | Number | Array
     },
     options: {
       type: Array,
@@ -58,13 +59,14 @@ export default {
         } else {
           arr.push(h('el-option', {
             props: {
-              value: option[this.defaultProps.value],
+              value: option[this.defaultProps.value] !== undefined ? option[this.defaultProps.value] : option,
               label: option[this.defaultProps.label] ? option[this.defaultProps.label]
                 : (option[this.defaultProps.value] ? option[this.defaultProps.value] : option),
               disabled: option.disabled ? option.disabled : false
             }
           },
-          this.$scopedSlots.default && this.$scopedSlots.default({ options: option })
+          // 自定义模板
+          this.$scopedSlots.default && this.$scopedSlots.default({ option })
           ))
         }
       })

@@ -149,7 +149,8 @@ export default {
                 btnConfig.class = classConfig
               } else if (configKey !== 'stop') {
                 normalAttribte[configKey] = options[key][configKey]
-              } else if (configKey === 'alert') {
+              }
+              if (configKey === 'alert') {
                 // value: false 默认不弹出来
                 btnConfig[configKey] = Object.assign({ value: false }, options[key][configKey])
               }

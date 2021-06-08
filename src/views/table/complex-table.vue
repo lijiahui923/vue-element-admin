@@ -3,7 +3,13 @@
     <VerticalLayout class="app-container">
       <template #top>
         <div class="search-container">
-          <el-input v-model="listQuery.title" :placeholder="$t('table.title')" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+          <el-input
+            v-model="listQuery.title"
+            :placeholder="$t('table.title')"
+            style="width: 200px;"
+            class="filter-item"
+            @keyup.enter.native="handleFilter"
+          />
           <g-select
             v-model="listQuery.importance"
             :options="importanceOptions"
@@ -12,12 +18,17 @@
             style="width: 90px"
             class="filter-item"
           />
-          <el-select v-model="listQuery.type" :placeholder="$t('table.type')" clearable class="filter-item" style="width: 130px">
-            <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name+'('+item.key+')'" :value="item.key" />
-          </el-select>
-          <el-select v-model="listQuery.sort" style="width: 140px" class="filter-item" @change="handleFilter">
-            <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key" />
-          </el-select>
+          <g-select
+            v-model="listQuery.type"
+            :options="calendarTypeOptions"
+            :placeholder="$t('table.type')"
+            clearable
+            style="width: 130px"
+            class="filter-item"
+            :default-props="{ label: 'display_name', value: 'key'}"
+          >
+            <template v-slot:default="{ option }">{{ option.display_name+'('+option.key+')' }}</template>
+          </g-select>
           <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
             {{ $t('table.search') }}
           </el-button>
@@ -27,9 +38,6 @@
           <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
             {{ $t('table.export') }}
           </el-button>
-          <el-checkbox v-model="showReviewer" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">
-            {{ $t('table.reviewer') }}
-          </el-checkbox>
         </div>
       </template>
       <template #buttom="{ height }">
@@ -172,6 +180,10 @@ export default {
           prop: 'author'
         },
         {
+          label: 'table.type',
+          prop: 'type'
+        },
+        {
           label: 'table.importance',
           prop: 'importance',
           slots: 'importance'
@@ -259,39 +271,36 @@ export default {
       total: 0,
       listLoading: true,
       listQuery: {
-        page: 1,
-        limit: 10,
-        importance: undefined,
-        title: undefined,
-        type: undefined,
-        sort: '+id'
+        importance: '',
+        title: '',
+        type: ''
       },
-      // importanceOptions: [1, 2, 3],
-      importanceOptions: [{
-        label: '热门城市',
-        children: [{
-          value: 'Shanghai',
-          label: '上海'
-        }, {
-          value: 'Beijing',
-          label: '北京'
-        }]
-      }, {
-        label: '城市名',
-        children: [{
-          value: 'Chengdu',
-          label: '成都'
-        }, {
-          value: 'Shenzhen',
-          label: '深圳'
-        }, {
-          value: 'Guangzhou',
-          label: '广州'
-        }, {
-          value: 'Dalian',
-          label: '大连'
-        }]
-      }],
+      importanceOptions: [1, 2, 3],
+      // importanceOptions: [{
+      //   label: '热门城市',
+      //   children: [{
+      //     value: 'Shanghai',
+      //     label: '上海'
+      //   }, {
+      //     value: 'Beijing',
+      //     label: '北京'
+      //   }]
+      // }, {
+      //   label: '城市名',
+      //   children: [{
+      //     value: 'Chengdu',
+      //     label: '成都'
+      //   }, {
+      //     value: 'Shenzhen',
+      //     label: '深圳'
+      //   }, {
+      //     value: 'Guangzhou',
+      //     label: '广州'
+      //   }, {
+      //     value: 'Dalian',
+      //     label: '大连'
+      //   }]
+      // }],
       // importanceOptions: [{
       //   value: 'Beijing',
       //   label: '北京'
@@ -351,7 +360,12 @@ export default {
     },
     getList() {
       this.listLoading = true
-      fetchList(this.pagination).then(response => {
+      const params = {
+        currentPage: this.pagination.currentPage,
+        pageSize: this.pagination.pageSize,
+        params: this.listQuery
+      }
+      fetchList(params).then(response => {
         this.list = response.data.items
         this.pagination.total = response.data.total
 
@@ -362,7 +376,7 @@ export default {
       })
     },
     handleFilter() {
-      this.listQuery.page = 1
+      this.pagination.currentPage = 1
       this.getList()
     },
     handleModifyStatus(row, status) {

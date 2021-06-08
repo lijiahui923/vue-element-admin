@@ -32,19 +32,14 @@ module.exports = [
     url: '/vue-element-admin/article/list',
     type: 'get',
     response: config => {
-      const { importance, type, title, currentPage = 1, pageSize = 10, sort } = config.query
-
-      let mockList = List.filter(item => {
+      const { params, currentPage = 1, pageSize = 10 } = config.query
+      const { title, type, importance } = JSON.parse(params)
+      const mockList = List.filter(item => {
         if (importance && item.importance !== +importance) return false
         if (type && item.type !== type) return false
         if (title && item.title.indexOf(title) < 0) return false
         return true
       })
-
-      if (sort === '-id') {
-        mockList = mockList.reverse()
-      }
-
       const pageList = mockList.filter((item, index) => index < pageSize * currentPage && index >= pageSize * (currentPage - 1))
 
       return {

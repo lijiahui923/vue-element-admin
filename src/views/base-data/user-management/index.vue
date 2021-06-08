@@ -12,9 +12,9 @@
           :data="userList"
           :columns-config="{'align': 'center', 'min-width': '200'}"
         >
-          <!-- <template #headerLeft>
-            <g-button type="primary" unique-key="add" @click="handleAddRole">新增</g-button>
-          </template> -->
+          <template #headerLeft>
+            <g-button type="primary" unique-key="add" @click="handleAddUser">新增</g-button>
+          </template>
         </g-table>
       </template>
     </VerticalLayout>
@@ -72,6 +72,7 @@ export default {
     this.getUserAllList()
   },
   methods: {
+    handleAddUser() {},
     getUserAllList() {
       getUserAll().then(({ data }) => {
         this.userList = data.rows

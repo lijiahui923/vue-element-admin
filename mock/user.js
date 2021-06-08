@@ -141,5 +141,43 @@ module.exports = [
         }
       }
     }
+  },
+  // 新增
+  {
+    url: '/vue-element-admin/user/create',
+    type: 'post',
+    response: _ => {
+      return {
+        code: 20000,
+        data: 'success'
+      }
+    }
+  },
+  // 编辑
+  {
+    url: '/vue-element-admin/user/update',
+    type: 'post',
+    response: _ => {
+      return {
+        code: 20000,
+        data: 'success'
+      }
+    }
+  },
+  // 查看详情
+  {
+    url: '/vue-element-admin/article/detail',
+    type: 'get',
+    response: config => {
+      const { id } = config.query
+      for (const user of userList) {
+        if (user.id === +id) {
+          return {
+            code: 20000,
+            data: user
+          }
+        }
+      }
+    }
   }
 ]
