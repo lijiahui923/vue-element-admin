@@ -108,10 +108,9 @@
 */
 import path from 'path'
 import { deepClone } from '@/utils'
-import { getRoles, addRole, deleteRole, updateRole } from '@/api/role'
-import { asyncRoutes } from '@/router'
-import { handleAsyncRouterToJson } from '@/utils/permission'
-
+import { getMenuAll, getRoles, addRole, deleteRole, updateRole } from '@/api/role'
+// import { asyncRoutes } from '@/router'
+// import { handleAsyncRouterToJson } from '@/utils/permission'
 import i18n from '@/lang'
 const defaultRole = {
   key: '',
@@ -151,15 +150,11 @@ export default {
         width: '300px',
         buttons: {
           update: {
-            type: 'primary',
-            label: '编辑',
             click: (row) => {
               this.handleEdit(row)
             }
           },
           remove: {
-            type: 'danger',
-            label: '删除',
             click: (row) => {
               this.handleDelete(row)
             }
@@ -188,12 +183,17 @@ export default {
       if (!value) return true
       return data.label.indexOf(value) !== -1
     },
-    async getRoutes() {
-      handleAsyncRouterToJson(asyncRoutes).then(res => {
-        this.serviceRoutes = res
-        const routes = this.generateRoutes(res)
-        this.routes = this.i18n(routes)
+    // 获取所有的异步路由
+    getRoutes() {
+      getMenuAll().then(res => {
+        console.log(res)
       })
+      // handleAsyncRouterToJson(asyncRoutes).then(res => {
+      //   console.log(res)
+      //   this.serviceRoutes = res
+      //   const route = this.generateRoutes(res)
+      //   this.routes = this.i18n(route)
+      // })
     },
     async getRoles() {
       const res = await getRoles()
@@ -209,6 +209,7 @@ export default {
       })
       return app
     },
+    // 重塑路线结构，使其看起来与侧边栏相同
     // Reshape the routes structure so that it looks the same as the sidebar
     generateRoutes(routes, basePath = '/') {
       const res = []

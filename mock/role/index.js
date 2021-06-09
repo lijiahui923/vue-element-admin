@@ -1,6 +1,7 @@
 const Mock = require('mockjs')
 const { deepClone } = require('../utils')
 const { asyncRoutes, constantRoutes } = require('./routes.js')
+const asyncRoutesAll = require('./asyncRoutes')
 
 const routes = deepClone([...constantRoutes, ...asyncRoutes])
 
@@ -36,6 +37,17 @@ const roles = [
 ]
 
 module.exports = [
+  // 获取所有存储在后台的页面和按钮
+  {
+    url: '/vue-element-admin/menu/all',
+    type: 'get',
+    response: _ => {
+      return {
+        code: 20000,
+        data: asyncRoutesAll
+      }
+    }
+  },
   // mock get all routes form server
   {
     url: '/vue-element-admin/routes',

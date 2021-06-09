@@ -62,7 +62,11 @@ export default {
     clipboardDemo: 'Clipboard',
     i18n: 'I18n',
     externalLink: 'External Link',
-    profile: 'Profile'
+    profile: 'Profile',
+    authorityManagement: 'authority management',
+    roleManagement: 'role management',
+    permissionInformation: 'permission information',
+    userManagement: 'user management'
   },
   navbar: {
     dashboard: 'Dashboard',

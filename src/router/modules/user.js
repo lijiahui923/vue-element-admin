@@ -13,8 +13,8 @@ const authRouter = {
     {
       path: 'user-management',
       component: () => import('@/views/base-data/user-management'),
-      name: '用户管理',
-      meta: { title: 'user-management', permission: ['add', 'update', 'remove'] }
+      name: 'user-management',
+      meta: { title: 'userManagement', permission: ['add', 'update', 'remove'] }
     }
   ]
 }

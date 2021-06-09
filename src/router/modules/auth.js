@@ -14,13 +14,13 @@ const authRouter = {
       path: 'role-management',
       component: () => import('@/views/authority-management/role-management'),
       name: 'role-management',
-      meta: { title: 'roleManagement', permission: ['add', 'update', 'remove'] }
+      meta: { title: 'roleManagement', permission: [{ label: '新增', value: 'add' }, { label: '编辑', value: 'update' }, { label: '删除', value: 'remove' }] }
     },
     {
       path: 'permission-information',
       component: () => import('@/views/authority-management/permission-information'),
       name: 'permission-information',
-      meta: { title: 'permissionInformation', permission: ['add', 'update', 'remove'] }
+      meta: { title: 'permissionInformation', permission: [{ label: '新增', value: 'add' }, { label: '编辑', value: 'update' }, { label: '删除', value: 'remove' }] }
     }
   ]
 }

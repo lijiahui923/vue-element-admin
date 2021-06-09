@@ -1,5 +1,12 @@
 import request from '@/utils/request'
 
+export function getMenuAll() {
+  return request({
+    url: '/vue-element-admin/menu/all',
+    method: 'get'
+  })
+}
+
 export function getRoutes() {
   return request({
     url: '/vue-element-admin/routes',
