@@ -173,4 +173,7 @@ const asyncRoutes = [
     ]
   }
 ]
-export default asyncRoutes
+
+module.exports = {
+  asyncRoutes
+}
