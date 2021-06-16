@@ -4,7 +4,7 @@
       <a href="https://github.com/nhnent/tui.editor" target="_blank">tui.editor</a> ，simply wrapped with Vue.
       <a
         target="_blank"
-        href="https://panjiachen.github.io/vue-element-admin-site/feature/component/markdown-editor.html"
+        href="#"
       >
         Documentation </a>
     </aside>

@@ -2,7 +2,7 @@
   <aside>
     {{ $t('example.warning') }}
     <a
-      href="https://panjiachen.github.io/vue-element-admin-site/guide/essentials/tags-view.html"
+      href="#"
       target="_blank"
     >Document</a>
   </aside>
