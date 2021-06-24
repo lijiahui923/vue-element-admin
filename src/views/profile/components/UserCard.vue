@@ -6,7 +6,10 @@
 
     <div class="user-profile">
       <div class="box-center">
-        <img class="user-avatar" :src="user.avatar">
+        <pan-thumb :image="user.avatar" :height="'100px'" :width="'100px'" :hoverable="false">
+          <div>Hello</div>
+          {{ user.role }}
+        </pan-thumb>
       </div>
       <div class="box-center">
         <div class="user-name text-center">{{ user.name }}</div>
@@ -16,10 +19,10 @@
 
     <div class="user-bio">
       <div class="user-education user-bio-section">
-        <div class="user-bio-section-header"><svg-icon icon-class="education" /><span>description</span></div>
+        <div class="user-bio-section-header"><svg-icon icon-class="education" /><span>Education</span></div>
         <div class="user-bio-section-body">
           <div class="text-muted">
-            Be a super administrator with all permissions.
+            JS in Computer Science from the University of Technology
           </div>
         </div>
       </div>
@@ -50,8 +53,10 @@
 </template>
 
 <script>
+import PanThumb from '@/components/PanThumb'
 
 export default {
+  components: { PanThumb },
   props: {
     user: {
       type: Object,
@@ -69,25 +74,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/styles/mixin.scss";
 .box-center {
   margin: 0 auto;
   display: table;
-  .user-avatar {
-    width: 100px;
-    height: 100px;
-    border: #f3f4f5 solid 5px;
-    border-radius: 50%;
-    transition: all 1s;
-  }
-  .user-avatar:hover {
-    transform: rotate(360deg);
-  }
 }
 
 .text-muted {
   color: #777;
-  @include multiLine;
 }
 
 .user-profile {

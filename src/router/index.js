@@ -14,6 +14,7 @@ import authRouter from './modules/auth'
 import userRouter from './modules/user'
 /**
  * Note: sub-menu only appear when route children.length >= 1
+ * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
  *
  * hidden: true                   如果设置为 true，项目将不会显示在侧边栏中（默认为 false）
  * alwaysShow: true               如果设置为 true，将始终显示根菜单
@@ -239,7 +240,7 @@ export const asyncRoutes = [
     component: Layout,
     children: [
       {
-        path: '#',
+        path: 'https://github.com/PanJiaChen/vue-element-admin',
         meta: { title: 'externalLink', icon: 'link' }
       }
     ]
