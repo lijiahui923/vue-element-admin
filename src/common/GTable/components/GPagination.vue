@@ -1,7 +1,8 @@
 <template>
   <div>
     <el-pagination
-      :style="{'text-align': align, 'margin-top': '10px'}"
+      class="g-pagination"
+      :style="{'text-align': align, 'margin-top': '5px'}"
       background
       :small="small"
       :size="size"
@@ -100,3 +101,15 @@ export default {
   }
 }
 </script>
+
+<style>
+.g-pagination .el-pagination__sizes {
+  height: 22px !important;
+}
+.g-pagination .el-pagination__sizes .el-select.el-select--mini {
+  height: 22px !important;
+}
+.g-pagination .el-input__inner {
+  height: 22px !important;
+}
+</style>

@@ -46,7 +46,7 @@ export function handleJsonRouterToAsyncRouter(jsonRouter, t) {
 
 function handleComponent(components) {
   // 可能会有bug(说找不到模板)：---解决方案安装babel-plugin-syntax-dynamic-import，在babel.config.js配置'plugins': ['syntax-dynamic-import']
-  return () => import('@/views/' + components)
+  return () => require(`@/views/${components}`)
 }
 
 /**

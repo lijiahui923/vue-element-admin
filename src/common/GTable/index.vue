@@ -84,8 +84,6 @@ export default {
       const columns = this.renderColumns(h)
       const $this = this
       const props = Object.assign({}, defaultProps, $attrs, { data: this.data })
-      // props.height = props.height - 60
-      // const newProps = omit(props, 'height')
       let headerToolsHeight
       if (this.$refs['table-header-tools']) {
         headerToolsHeight = document.getElementsByClassName('header-tools')[0].clientHeight
@@ -96,12 +94,7 @@ export default {
       return h(
         'el-table',
         {
-          // 减去分页的高度 这20是内边距,这6是头部工具栏的下边距
-          // style: {
-          //   height: this.paginationConfig
-          //     ? props.height - (headerToolsHeight ? headerToolsHeight + 56 + 6 : 56) + 'px'
-          //     : props.height - (headerToolsHeight ? headerToolsHeight + 20 + 6 : 20) + 'px'
-          // },
+          class: 'g-table',
           props,
           on: {
             ...$listeners,
@@ -210,7 +203,6 @@ export default {
     },
     // 渲染操作列
     renderColumnForOperate(h, column) {
-      // const self = this
       !column.fixed && (column.fixed = 'right')
       const props = Object.assign({}, column, { label: '操作 ' }, { 'show-overflow-tooltip': false })
       return h(
@@ -352,5 +344,11 @@ export default {
   display: flex;
   justify-content: space-between;
   margin-bottom: 6px;
+}
+</style>
+
+<style>
+.g-table .el-table__fixed-right {
+  height: 100% !important;
 }
 </style>
